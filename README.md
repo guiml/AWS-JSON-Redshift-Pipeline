@@ -59,7 +59,8 @@ The rest of the information is organized in peripherical tables containf informa
 * year
 * weekday
 
-Here is a visual representation of the pipeline:
+***Here is a visual representation of the pipeline:***
+
 <img src="./Pipeline.png" width="50%"/>
 
 ## Example queries and results for song play analysis
