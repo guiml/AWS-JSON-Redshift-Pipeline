@@ -1,0 +1,31 @@
+SELECT 
+se.artist,
+se.auth,
+se.firstname,
+se.gender,
+se.iteminsession,
+se.lastName,
+se.length,
+se.level,
+se.location,
+se.method,
+se.page,
+se.registration,
+se.sessionid,
+se.song,
+se.status,
+timestamp 'epoch' + se.ts/1000 * interval '1 second' as start_time,
+se.useragent,
+se.userid,
+ss.artist_id,
+ss.artist_latitude,
+ss.artist_longitude,
+ss.artist_location,
+ss.artist_name,
+ss.song_id,
+ss.title,
+ss.duration,
+ss.year
+FROM tbl_stg_events se
+JOIN tbl_stg_songs ss ON se.artist = ss.artist_name AND se.song = ss.title
+LIMIT 3
