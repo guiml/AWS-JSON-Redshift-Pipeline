@@ -7,7 +7,7 @@ In order to run this script you will need to following requirements:
 1) Create a file called keysecret.cfg (see content of the file after this list);
 2) Save all files into the same folder;
 3) Run *Setup Redshift.ipynb* with a Jupyter Notebook interpreter;
-4) In the terminal, run *python3 create_tables.py** and then *python3 create_tables.py* 
+4) In the terminal, run *python3 create_tables.py* and then *python3 create_tables.py* 
 
 *keysecret.cfg* content:
 
