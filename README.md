@@ -73,7 +73,8 @@ The rest of the information is organized in peripherical tables containf informa
 * year
 * weekday
 
-Here is a visual representation of the pipeline:
+***Here is a visual representation of the pipeline:***
+
 <img src="./Pipeline.png" width="50%"/>
 
 ## Files in the repository
@@ -118,5 +119,5 @@ Result:
 
 | songtitle                             | artist                 | 
 | :---                                  |    :----:              |
-| Lovefool                              | The Cardigans          |
-| Eriatarka                             | The Mars Volta         |
+| Baja por diversion (directo 05)       | La Fuga                |
+| Hey Daddy (Daddy's Home)              | Usher                  |
