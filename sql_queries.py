@@ -150,6 +150,7 @@ se.location,
 se.useragent
 FROM tbl_stg_events se
 JOIN tbl_stg_songs ss ON se.artist = ss.artist_name AND se.song = ss.title 
+WHERE se.page = 'NextSong'
 """)
 
 user_table_insert = ("""
