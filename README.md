@@ -7,7 +7,7 @@ In order to run this script you will need to following requirements:
 1) Create a file called keysecret.cfg (see content of the file after this list);
 2) Save all files into the same folder;
 3) Run *Setup Redshift.ipynb* with a Jupyter Notebook interpreter;
-4) In the terminal, run *python3 create_tables.py** and then *python3 create_tables.py* 
+4) In the terminal, run *python3 create_tables.py* and then *python3 create_tables.py* 
 
 *keysecret.cfg* content:
 
@@ -65,7 +65,7 @@ The rest of the information is organized in peripherical tables containf informa
 * latitude
 * longitude
 
-*times:
+*time:
 * start_time
 * hour
 * day
@@ -83,7 +83,8 @@ The rest of the information is organized in peripherical tables containf informa
 The origin repository is comprised of two sets of files: 
 
 **1) Song Dataset**
-The first dataset is distributed among various JSON formated files containing metadata about a song and the artist of that song. 
+The first dataset is distributed among various JSON formated files containing metadata about a song and the artist of that song.
+
 **2) Logs Dataset**
 The second dataset consists of log files in JSON format with simulated app activity logs from the music streaming app.
 
