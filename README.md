@@ -10,6 +10,7 @@ In order to run this script you will need to following requirements:
 4) In the terminal, run *python3 create_tables.py** and then *python3 create_tables.py* 
 
 *keysecret.cfg* content:
+
     [AWS]
     KEY=INSERT_HERE_YOUR_AMAZON_KEY
     SECRET=INSERT HERE YOUR AMAZON KEY
