@@ -7,13 +7,13 @@ config.read('dwh.cfg')
 
 # DROP TABLES
 
-staging_events_table_drop = "DROP TABLE IF EXISTS TBL_STG_EVENTS"
-staging_songs_table_drop = "DROP TABLE IF EXISTS TBL_STG_SONGS"
-songplay_table_drop = "DROP TABLE IF EXISTS tbl_songplay"
-user_table_drop = "DROP TABLE IF EXISTS tbl_users"
-song_table_drop = "DROP TABLE IF EXISTS tbl_songs"
-artist_table_drop = "DROP TABLE IF EXISTS tbl_artists"
-time_table_drop = "DROP TABLE IF EXISTS tbl_times"
+staging_events_table_drop = "DROP TABLE IF EXISTS tbl_stg_events"
+staging_songs_table_drop = "DROP TABLE IF EXISTS tbl_stg_songs"
+songplay_table_drop = "DROP TABLE IF EXISTS songplays"
+user_table_drop = "DROP TABLE IF EXISTS users"
+song_table_drop = "DROP TABLE IF EXISTS songs"
+artist_table_drop = "DROP TABLE IF EXISTS artists"
+time_table_drop = "DROP TABLE IF EXISTS time"
 
 # CREATE TABLES
 
@@ -56,13 +56,13 @@ CREATE TABLE IF NOT EXISTS tbl_stg_songs (
 """)
 
 songplay_table_create = ("""
-CREATE TABLE IF NOT EXISTS tbl_songplay (
-    songplay_id bigint IDENTITY(0, 1),
+CREATE TABLE IF NOT EXISTS songplays (
+    songplay_id bigint IDENTITY(0, 1) PRIMARY KEY,
     start_time time,
-    user_id varchar,
+    user_id varchar NOT NULL,
     level varchar,
-    song_id varchar,
-    artist_id varchar,
+    song_id varchar NOT NULL,
+    artist_id varchar NOT NULL,
     session_id varchar,
     location varchar,
     user_agent varchar
@@ -70,29 +70,29 @@ CREATE TABLE IF NOT EXISTS tbl_songplay (
 """)
 
 user_table_create = ("""
-CREATE TABLE IF NOT EXISTS tbl_users (
-    user_id varchar,
-    firstname varchar,
-    lastname varchar,
+CREATE TABLE IF NOT EXISTS users (
+    user_id varchar NOT NULL PRIMARY KEY,
+    firstname varchar NOT NULL,
+    lastname varchar NOT NULL,
     gender varchar,
     level varchar
 )
 """)
 
 song_table_create = ("""
-CREATE TABLE IF NOT EXISTS tbl_songs (
-    song_id varchar,
-    title varchar,
-    artist_id varchar,
+CREATE TABLE IF NOT EXISTS songs (
+    song_id varchar NOT NULL PRIMARY KEY,
+    title varchar NOT NULL,
+    artist_id varchar NOT NULL,
     year bigint,
     duration numeric
 )
 """)
 
 artist_table_create = ("""
-CREATE TABLE IF NOT EXISTS tbl_artists (
-    artist_id varchar,
-    name varchar,
+CREATE TABLE IF NOT EXISTS artists (
+    artist_id varchar NOT NULL PRIMARY KEY,
+    name varchar NOT NULL,
     location varchar,
     latitude varchar,
     longitude varchar
@@ -100,8 +100,8 @@ CREATE TABLE IF NOT EXISTS tbl_artists (
 """)
 
 time_table_create = ("""
-CREATE TABLE IF NOT EXISTS tbl_times (
-    start_time time,
+CREATE TABLE IF NOT EXISTS time (
+    start_time time NOT NULL PRIMARY KEY,
     hour bigint,
     day bigint,
     week bigint,
@@ -115,20 +115,21 @@ CREATE TABLE IF NOT EXISTS tbl_times (
 
 staging_events_copy = """
     copy tbl_stg_events from 's3://udacity-dend/log_data'
-    credentials 'aws_iam_role=arn:aws:iam::376484744975:role/dwhRole'
+    credentials  'aws_iam_role={}'
     json 's3://udacity-dend/log_json_path.json' compupdate off region 'us-west-2';
-"""
+""".format(config.get("IAM_ROLE","ARN"))
 
+#SONG_DATA='s3://udacity-dend/song_data/A/A'.
 staging_songs_copy = """
     copy tbl_stg_songs from 's3://udacity-dend/song_data'
-    credentials 'aws_iam_role=arn:aws:iam::376484744975:role/dwhRole'
+    credentials  'aws_iam_role={}'
     json 'auto' compupdate off region 'us-west-2';
-"""
+""".format(config.get("IAM_ROLE","ARN"))
 
 # FINAL TABLES
 
 songplay_table_insert = ("""
-INSERT INTO tbl_songplay (
+INSERT INTO songplays (
     start_time,
     user_id,
     level,
@@ -152,7 +153,7 @@ JOIN tbl_stg_songs ss ON se.artist = ss.artist_name AND se.song = ss.title
 """)
 
 user_table_insert = ("""
-INSERT INTO tbl_users (
+INSERT INTO users (
     user_id,
     firstname,
     lastname,
@@ -165,11 +166,12 @@ SELECT DISTINCT
     lastname,
     gender,
     level
-FROM tbl_stg_events;
+FROM tbl_stg_events se
+WHERE se.page = 'NextSong';
 """)
 
 song_table_insert = ("""
-INSERT INTO tbl_songs(
+INSERT INTO songs(
     song_id,
     title,
     artist_id,
@@ -186,7 +188,7 @@ FROM tbl_stg_songs;
 """)
 
 artist_table_insert = ("""
-INSERT INTO tbl_artists (
+INSERT INTO artists (
     artist_id,
     name,
     location,
@@ -203,7 +205,7 @@ FROM tbl_stg_songs;
 """)
 
 time_table_insert = ("""
-INSERT INTO tbl_times (
+INSERT INTO time (
     start_time,
     hour,
     day,
@@ -219,7 +221,8 @@ extract(week from start_time) as week,
 extract(month from start_time) as month,
 extract(year from start_time) as year,
 extract(weekday from start_time) as weekday
-from tbl_stg_events se; 
+FROM tbl_stg_events se
+WHERE se.page = 'NextSong'; 
 """)
 
 

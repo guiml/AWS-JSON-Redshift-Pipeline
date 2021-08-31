@@ -1,5 +1,19 @@
 # AWS Pipeline processing
 
+## Running this script:
+
+In order to run this script you will need to following requirements:
+1) Have Python 3 installed in the computer with pandas, boto3, json, and jupyter libraries installed;
+1) Create a file called keysecret.cfg (see content of the file after this list);
+2) Save all files into the same folder;
+3) Run *Setup Redshift.ipynb* with a Jupyter Notebook interpreter;
+4) In the terminal, run *python3 create_tables.py** and then *python3 create_tables.py* 
+
+*keysecret.cfg* content:
+    [AWS]
+    KEY=INSERT_HERE_YOUR_AMAZON_KEY
+    SECRET=INSERT HERE YOUR AMAZON KEY
+
 ## Purpose of this database 
 
 Discuss the purpose of this database in context of the startup, Sparkify, and their analytical goals.
@@ -29,28 +43,28 @@ The Star Schema is achieved when we assemble a Facts Table in the center of the 
 
 The rest of the information is organized in peripherical tables containf information grouped by the dimension of the data, called "dimension tables". These are the *dimension* tables and their fields:
 
-*tbl_users*:
+*users*:
 * user_id
 * first_name
 * last_name
 * gender
 * level
 
-*tbl_songs*:
+*songs*:
 * song_id
 * title
 * artist_id
 * year
 * duration
 
-*tbl_artists*:
+*artists*:
 * artist_id
 * name
 * location
 * latitude
 * longitude
 
-*tbl_times*:
+*times:
 * start_time
 * hour
 * day
@@ -62,15 +76,24 @@ The rest of the information is organized in peripherical tables containf informa
 Here is a visual representation of the pipeline:
 <img src="./Pipeline.png" width="50%"/>
 
+## Files in the repository
+
+The origin repository is comprised of two sets of files: 
+
+**1) Song Dataset**
+The first dataset is distributed among various JSON formated files containing metadata about a song and the artist of that song. 
+**2) Logs Dataset**
+The second dataset consists of log files in JSON format with simulated app activity logs from the music streaming app.
+
 ## Example queries and results for song play analysis
 
 Retrieve only song title and artist released in 1994:
 
     SELECT ts.title as SongTitle, ta.name as Artist
     FROM
-    tbl_songplay tsp
-    JOIN tbl_songs ts ON tsp.song_id = ts.song_id
-    JOIN tbl_artists ta ON tsp.artist_id = ta.artist_id
+    songplays tsp
+    JOIN songs ts ON tsp.song_id = ts.song_id
+    JOIN artists ta ON tsp.artist_id = ta.artist_id
     WHERE ts.year = 1994
 
 Result:
@@ -85,15 +108,15 @@ Retrieve only songs played on Thursdays:
 
     SELECT ts.title as SongTitle, ta.name as Artist 
     FROM
-    tbl_songplay tsp
-    JOIN tbl_songs ts ON tsp.song_id = ts.song_id
-    JOIN tbl_artists ta ON tsp.artist_id = ta.artist_id
-    JOIN tbl_times tt ON tsp.start_time = tt.start_time
+    songplays tsp
+    JOIN songs ts ON tsp.song_id = ts.song_id
+    JOIN artists ta ON tsp.artist_id = ta.artist_id
+    JOIN times tt ON tsp.start_time = tt.start_time
     WHERE tt.weekday = 4
 
 Result:
 
 | songtitle                             | artist                 | 
 | :---                                  |    :----:              |
-| Baja por diversion (directo 05)       | La Fuga                |
-| Hey Daddy (Daddy's Home)              | Usher                  |
+| Lovefool                              | The Cardigans          |
+| Eriatarka                             | The Mars Volta         |

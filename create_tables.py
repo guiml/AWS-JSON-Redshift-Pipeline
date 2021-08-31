@@ -3,19 +3,33 @@ import psycopg2
 from sql_queries import create_table_queries, drop_table_queries
 
 
+
 def drop_tables(cur, conn):
+    """
+    This function calls the query that drops the table 
+    case they exist. 
+    """
     for query in drop_table_queries:
         cur.execute(query)
         conn.commit()
 
 
 def create_tables(cur, conn):
+    """
+    This function calls the query that create the tables
+    in the Redshift environment. 
+    """
     for query in create_table_queries:
         cur.execute(query)
         conn.commit()
 
 
 def main():
+    """
+    This is the main function, everytime the script is ran
+    this function calls the other functions. This function
+    also sets the connection to the Cluster
+    """
     config = configparser.ConfigParser()
     config.read('dwh.cfg')
 
